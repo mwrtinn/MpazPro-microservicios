@@ -7,7 +7,7 @@ import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
-// Consultas de respuestas, progreso e intentos del estudiante.
+// Consultas de respuestas, progreso e intentos.
 public interface RespuestaRepository
         extends JpaRepository<Respuesta, Integer> {
 
@@ -19,7 +19,12 @@ public interface RespuestaRepository
     boolean existsByRutAlumnoAndPreguntaIdAndIntento(
             String rutAlumno, int preguntaId, int intento);
 
-    // Recupera el último intento registrado para un objetivo.
+    // Comprueba si existen resultados asociados.
+    boolean existsByOaId(int oaId);
+
+    boolean existsByPreguntaId(int preguntaId);
+
+    // Recupera el último intento registrado.
     @Query("""
             SELECT COALESCE(MAX(r.intento), 0)
             FROM Respuesta r
