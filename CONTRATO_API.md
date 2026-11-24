@@ -62,7 +62,7 @@ Respuesta:
 
 ## 4. Aprendizaje-service
 
-Estado: en desarrollo.
+Estado: implementado y verificado con 14 pruebas automatizadas.
 Agrupa currículo y seguimiento pedagógico.
 
 ### Objetivos de aprendizaje
@@ -194,3 +194,86 @@ No se emiten diagnósticos automáticos.
 - Pruebas unitarias y cobertura mínima del 80% de la lógica.
 - APK firmado en modo release.
 - Documentación técnica, GitHub y Trello.
+
+## 8. Formatos de integración de aprendizaje
+
+Todas las solicitudes requieren un token JWT válido.
+
+Authorization: Bearer TOKEN
+
+### Registrar respuesta
+
+POST /api/respuestas
+
+Solicitud JSON:
+
+```json
+{
+  "preguntaId": 1,
+  "intento": 1,
+  "elegida": 1
+}
+```
+
+El servidor obtiene el RUT desde el JWT, calcula el
+resultado y devuelve la respuesta registrada junto
+con la alternativa correcta.
+
+### Consultar intentos
+
+GET /api/intentos?oaId=1&tipo=PRUEBA
+
+Para consultar como docente se puede indicar el RUT:
+
+GET /api/intentos?oaId=1&tipo=PRUEBA&rut=111111111
+
+### Aprobar contenido
+
+PATCH /api/contenidos/1/estado
+
+Solicitud JSON:
+
+```json
+{
+  "estado": "APROBADO",
+  "observacionUtp": "Contenido revisado"
+}
+```
+
+Operación exclusiva de UTP.
+
+### Generar informe
+
+PUT /api/informes/111111111-1
+
+Solicitud JSON:
+
+```json
+{
+  "rutAlumno": "111111111",
+  "oaId": 1
+}
+```
+
+### Validar informe
+
+PATCH /api/informes/111111111-1/validar
+
+No requiere cuerpo JSON.
+Operación exclusiva del docente.
+
+## 9. Verificaciones del backend
+
+- Usuarios-service: 12 pruebas aprobadas.
+- Aprendizaje-service: 14 pruebas aprobadas.
+- Autenticación compartida verificada desde PowerShell.
+- Persistencia de datos mediante H2.
+- Operaciones CRUD y restricciones por perfil verificadas.
+
+## 10. Pendientes de integración móvil
+
+- Manejo de sesión y vencimiento del JWT.
+- Sincronización de datos locales y remotos.
+- Reanudación de intentos incompletos.
+- Retroalimentación de respuestas desde el servidor.
+- Manejo de errores HTTP y problemas de conexión.
